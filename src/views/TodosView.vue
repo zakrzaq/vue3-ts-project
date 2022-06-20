@@ -2,7 +2,7 @@
 import { onMounted, ref, computed } from "vue";
 import { getTodos } from "@/services/api/todosApi";
 import type Todo from "@/types/todo";
-import TodoOne from '@/completed/TodoOne.vue'
+// import TodoOne from "@/components/TodoOne.vue";
 // import BaseButton from "@/components/base/BaseButton.vue";
 
 let todos = ref<Todo[]>([
@@ -26,7 +26,7 @@ onMounted(async () => {
 
 <template>
   <div class="todos">
-    <TodoOne v-for="todo in seletedTodos" :key="todo.id">{{ todo.title }} :todo="todo"</TodoOne>
+    <p v-for="todo in seletedTodos" :key="todo.id">{{ todo.title }}</p>
   </div>
 </template>
 

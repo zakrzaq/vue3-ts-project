@@ -8,7 +8,7 @@ const props = defineProps<{
 </script>
 
 <template>
-  <p>{{ todo.title }}</p>  
+  <p>{{ props.todo.title }}</p>
 </template>
 
 <style lang="scss" scoped>
