@@ -10,7 +10,7 @@ let todos = ref<Todo[]>([
     userId: 1,
     id: 1,
     title: "sample todo",
-    completed: false,
+           completed: false,
   },
 ]);
 
