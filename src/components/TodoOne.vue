@@ -102,6 +102,7 @@ const removeTodo = (event: Event) => {
       border: none;
       border-radius: 5px;
       margin-left: 5px;
+      transition: opacity 1s;
 
       &:hover {
         opacity: 0.8;

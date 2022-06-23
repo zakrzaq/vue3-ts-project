@@ -13,18 +13,9 @@ let todos = ref<Todo[]>([
     completed: false,
   },
 ]);
-
 let localTodos = ref<any[] | Todo[]>([]);
-
 let todoInput = ref<string>("");
-
-//const selectedTodos = computed((): Todo[] => {
-//  return todos.value.slice(0, 9);
-//});
-
-//const completedTodos = computed((): Todo[] => {
-//  return selectedTodos.filter((todo: Todo) => todo.completed);
-//});
+let listView = ref("All");
 
 const addTodo = () => {
   let newTodo: Todo = {
@@ -34,12 +25,40 @@ const addTodo = () => {
     completed: false,
   };
   localTodos.value.push(newTodo);
-  todoInput.value = ''
+  todoInput.value = "";
 };
+
+const updateList = (event: Event) => {
+  listView.value = event.target.innerHTML;
+};
+
+const filteredTodos = computed(() => {
+  switch (listView.value) {
+    case "All":
+      return todos.value;
+    case "Completed":
+      return todos.value.filter((todo) => todo.completed);
+    case "Pending":
+      return todos.value.filter((todo) => !todo.completed);
+      deafult: return todos.value;
+  }
+});
+
+const filteredLocalTodos = computed(() => {
+  switch (listView.value) {
+    case "All":
+      return localTodos.value;
+    case "Completed":
+      return localTodos.value.filter((todo) => todo.completed);
+    case "Pending":
+      return localTodos.value.filter((todo) => !todo.completed);
+      deafult: return todos.value;
+  }
+});
 
 onMounted(async () => {
   const data = await getTodos();
-  todos.value = data;
+  todos.value = data.slice(0, 11);
 });
 </script>
 
@@ -54,8 +73,14 @@ onMounted(async () => {
       />
       <BaseButton @click="addTodo">Add Todo</BaseButton>
     </div>
+    <div class="list-selector">
+      <div class="selector-tag" @click="updateList">All</div>
+      <div class="selector-tag" @click="updateList">Completed</div>
+      <div class="selector-tag" @click="updateList">Pending</div>
+    </div>
     <div class="todos">
-      <TodoOne v-for="todo in localTodos" :key="todo.id" :todo="todo" />
+      <TodoOne v-for="todo in filteredLocalTodos" :key="todo.id" :todo="todo" />
+      <TodoOne v-for="todo in filteredTodos" :key="todo.id" :todo="todo" />
     </div>
   </div>
 </template>
@@ -67,7 +92,7 @@ onMounted(async () => {
     min-width: 400px;
     max-width: 700px;
     width: 100%;
-    margin-bottom: 40px;
+    margin-bottom: 10px;
 
     & input {
       flex-grow: 4;
@@ -75,6 +100,19 @@ onMounted(async () => {
       border: none;
       border-radius: 5px;
       padding: 0 10px;
+    }
+  }
+
+  .list-selector {
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-around;
+
+    .selector-tag {
+      padding: 5px 20px;
+      min-width: 50px;
+      background: white;
+      color: black;
     }
   }
 
